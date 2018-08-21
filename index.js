@@ -11,7 +11,6 @@
         }
     }
 
-    changeNumberOnDom(tempObj); 
 
     
 
@@ -21,6 +20,8 @@
 
 
     function loadDoc() {
+      console.log("update data");
+      changeNumberOnDom(tempObj); 
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         
