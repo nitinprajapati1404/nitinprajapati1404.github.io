@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>byTag</title>
+</head>
+<body>
+	<div class="headcontact">
+		<span class="headconticon" style="background-image:url(https://www.pineviewfamilydental.com/wp-content/uploads/2018/07/headcont-icon.png);">Contact</span>
+		<small>
+			<a href="tel:955.850-0033" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 955.850-0033 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-445.2222 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928 445 3333 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-445-3333 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-445-5555 </a>
+			<a href="tel:(928) 445 1233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> (928) 445 6666 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-445-7777 </a>
+			<p> 928-445-9233 </p>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> sdf sdf sdf 928-445-8888 928-445-9999 928-445-0000 928-445-9233 tewa dsac s 928-445-9233 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-445-9233 </a>
+			<a href="tel:928-445-9233" style="color: rgb(108, 126, 50);" onmouseover="this.style.color='#4c5922';" onmouseout="this.style.color='#6c7e32'"> 928-123-4567 </a>
+		</small>
+		<p>Call for appointment or emergency</p>
+
+	</div>
+	<script type="text/javascript">
+	var tagSearchForArray = ['a', 'p'];
+	var attrInfo = document.querySelectorAll("a[href^='tel:']");
+	var elementsForSearch;
+	var pattern = /\D?[0-9]{3}\D?\s?[0-9]{3}\D?\s?[0-9]{4}/g;
+	var n = [];
+	for (var i = 0; i < tagSearchForArray.length; i++) {
+		elementsForSearch = document.getElementsByTagName(tagSearchForArray[i]);
+		for (var j = 0; j < elementsForSearch.length; j++) {
+			if (elementsForSearch[j].innerText.toLowerCase().match(pattern) != null) {
+				for (let value of elementsForSearch[j].innerText.toLowerCase().match(pattern)) {
+					// value = value.trim().replace(/[^\d\+]/g,"");
+					value = value.trim();
+					if (n.indexOf(value) == -1) {
+						n.push(value);
+					}
+				}
+			}
+		}
+	}
+
+	for(let key in attrInfo){
+		if(typeof attrInfo[key].href != "undefined" && attrInfo[key].href != "undefined"){
+			var ret = attrInfo[key].href.replace('tel:','');
+			// ret = ret.trim().replace(/[^\d\+]/g,"");
+			ret = ret.trim();
+			if(n.indexOf(ret) === -1){
+				n.push(ret);
+			}
+		}
+	}
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("GET", "http://localhost:1337/number/swap?number="+n, true);
+	xhttp.send(n.toString());
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(this.responseText);
+			changeNumberOnDom(JSON.parse(this.responseText).data);
+		}
+	};
+
+	function changeNumberOnDom(replaceNumberObj){
+        for(let key in replaceNumberObj){
+            document.body.innerHTML = document.body.innerHTML.split(key).join(replaceNumberObj[key]);
+        }
+    }
+	</script>
+</body>
+</html>
