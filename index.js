@@ -45,7 +45,7 @@
     function loadDoc() {
       var xhttp = new XMLHttpRequest();
       // xhttp.open("GET", "http://localhost:1337/number/swap?number="+n, true);
-      xhttp.open("GET", "http://18.208.54.106/number/swap?number="+n, true);
+      xhttp.open("GET", "http://18.208.54.106:1337/number/swap?number="+n, true);
       xhttp.send(n.toString());
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
