@@ -45,13 +45,41 @@ var tagSearchForArray = ['a', 'p'];
   }
 
   getSource = function(e, a) {
-    return e = e || "direct",
-    e.match(/doubleclick/) || a.match(/gclid=/) ? "google_paid" : e.match(/google/) && !e.match(/mail\.google\.com/) ? e.match(/maps\.google\.[a-z\.]{2,5}/) ? "google_local" : e.match(/google\.[a-z\.]{2,5}\/(aclk|afs)/) || e.match(/googleadservices/) || a.match(/utm_(medium|source)=[cp]pc/i) || a.match(/(matchtype|adposition)=/i) ? "google_paid" : "google_organic" : e.match(/yahoo/) && !e.match(/mail\.yahoo\.com/) ? e.match(/local\.(search\.)?yahoo\.com/) ? "yahoo_local" : a.match(/utm_medium=[cp]pc/i) ? "yahoo_paid" : "yahoo_organic" : e.match(/(\/|\.)bing\./) || a.match(/utm_source=bing/i) ? e.match(/bing\.com\/local/) ? "bing_local" : a.match(/utm_medium=[pc]pc/i) ? "bing_paid" : "bing_organic" : e.match(/msn\.com/) ? "bing_paid" : "direct" === e ? a.match(/utm_medium=[cp]pc/i) && a.match(/utm_source=google/i) ? "google_paid" : "direct" : CallTrkSwapAdit.getReferrerDomain(e)
+    e = e || "direct";
+    
+    var sourceUrl = "";
+    // http://localhost/explore/scrap/2/?gclid=232 // hit url in this form for google paid testing
+
+    //check for google
+    sourceUrl = e.match(/doubleclick/) || a.match(/gclid=/) ? "google_paid" : e.match(/google/) && !e.match(/mail\.google\.com/) ? e.match(/maps\.google\.[a-z\.]{2,5}/)  ? "google_local" : e.match(/google\.[a-z\.]{2,5}\/(aclk|afs)/) || e.match(/googleadservices/) || a.match(/utm_(medium|source)=[cp]pc/i) || a.match(/(matchtype|adposition)=/i) ? "google_paid" : "google_organic":'';
+    
+    // check for yahoo  
+    if(!sourceUrl){
+      // console.log("for yahoo");
+        sourceUrl = e.match(/yahoo/) && !e.match(/mail\.yahoo\.com/) ? e.match(/local\.(search\.)?yahoo\.com/) ? "yahoo_local" : a.match(/utm_medium=[cp]pc/i) ? "yahoo_paid" : "yahoo_organic" :"";
+    }
+
+    // check for bing
+    if(!sourceUrl){
+      // console.log("for bing");
+        sourceUrl = e.match(/(\/|\.)bing\./) || a.match(/utm_source=bing/i) ? e.match(/bing\.com\/local/) ? "bing_local" : a.match(/utm_medium=[pc]pc/i) ? "bing_paid" : "bing_organic" : e.match(/msn\.com/) ? "bing_paid" : "";
+    }
+
+    if(!sourceUrl){
+      // direct or referal or google paid
+      sourceUrl = "direct" === e ? a.match(/utm_medium=[cp]pc/i) && a.match(/utm_source=google/i) ? "google_paid" : "direct" : this.getReferrerDomain(e);
+    }
+    // e = e || "direct",
+    // e.match(/doubleclick/) || a.match(/gclid=/) ? "google_paid" : e.match(/google/) && !e.match(/mail\.google\.com/) ? e.match(/maps\.google\.[a-z\.]{2,5}/) ? "google_local" : e.match(/google\.[a-z\.]{2,5}\/(aclk|afs)/) || e.match(/googleadservices/) || a.match(/utm_(medium|source)=[cp]pc/i) || a.match(/(matchtype|adposition)=/i) ? "google_paid" : "google_organic" : e.match(/yahoo/) && !e.match(/mail\.yahoo\.com/) ? e.match(/local\.(search\.)?yahoo\.com/) ? "yahoo_local" : a.match(/utm_medium=[cp]pc/i) ? "yahoo_paid" : "yahoo_organic" : e.match(/(\/|\.)bing\./) || a.match(/utm_source=bing/i) ? e.match(/bing\.com\/local/) ? "bing_local" : a.match(/utm_medium=[pc]pc/i) ? "bing_paid" : "bing_organic" : e.match(/msn\.com/) ? "bing_paid" : "direct" === e ? a.match(/utm_medium=[cp]pc/i) && a.match(/utm_source=google/i) ? "google_paid" : "direct" : CallTrkSwapAdit.getReferrerDomain(e)
+    // console.log("at the enddirect::",sourceUrl);
+    return sourceUrl; 
   }
 
-  getReferrerDomain = function(e, a) {
+  getReferrerDomain = function(e) {
+    // console.log("get refer domain::",e);
     var a = e.split("/")[2]
     , r = a.split(".");
+    // yahoo.com
     return r.length > 2 ? r[r.length - 2] + "." + r[r.length - 1] : a
   }
 
@@ -71,8 +99,15 @@ var tagSearchForArray = ['a', 'p'];
   }
 
   loadDoc = function() {
+    // document.referrer = "https://in.search.yahoo.com/";
+    // document.referrer = "https://www.google.com/gclid=232";
+    // https://mail.google.com/
+    // https://www.google.com/
+    // console.log("document.referrer::",document.referrer);
+    // console.log("document.URL::",document.URL);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://18.208.54.106:1337/number/swap?number="+getFilterNumberArray(n)+"&referrer_tracking_source="+getSource(document.referrer, document.URL), true);
+    // xhttp.open("GET", "http://localhost:1337/number/swap?number="+getFilterNumberArray(n)+"&referrer_tracking_source="+getSource(document.referrer, document.URL), true);
     xhttp.send(n.toString());
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
