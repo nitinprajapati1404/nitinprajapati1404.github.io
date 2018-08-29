@@ -103,8 +103,8 @@ var tagSearchForArray = ['a', 'p'];
     // document.referrer = "https://www.google.com/gclid=232";
     // https://mail.google.com/
     // https://www.google.com/
-    // console.log("document.referrer::",document.referrer);
-    // console.log("document.URL::",document.URL);
+    console.log("document.referrer adit::",document.referrer);
+    console.log("document.URL::",document.URL);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://18.208.54.106:1337/number/swap?number="+getFilterNumberArray(n)+"&referrer_tracking_source="+getSource(document.referrer, document.URL), true);
     // xhttp.open("GET", "http://localhost:1337/number/swap?number="+getFilterNumberArray(n)+"&referrer_tracking_source="+getSource(document.referrer, document.URL), true);
@@ -115,3 +115,5 @@ var tagSearchForArray = ['a', 'p'];
       }
     };
   }
+
+  loadDoc();
