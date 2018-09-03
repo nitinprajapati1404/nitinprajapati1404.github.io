@@ -32,7 +32,7 @@ for(let key in attrInfo){
 }
 
 function AditCallTrkSwap() {
-
+    var company;
 }
 
 AditCallTrkSwap.prototype.getFilterNumberArray = function(n) {
@@ -52,13 +52,18 @@ AditCallTrkSwap.removeSpecialCharFromNumber = function(number) {
 
 AditCallTrkSwap.prototype.loadDoc = function() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://18.208.54.106:1337/number/swap?number="+this.getFilterNumberArray(n)+"&referrer_tracking_source="+this.run(), true);
+    xhttp.open("GET", "http://localhost:1337/number/"+this.getCompanyId('company')+"/swap?number="+this.getFilterNumberArray(n)+"&referrer_tracking_source="+this.run(), true);
     xhttp.send(n.toString());
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             AditCallTrkSwap.changeNumberOnDom(JSON.parse(this.responseText).data);
         }
     };
+}
+
+AditCallTrkSwap.prototype.getCompanyId = function(k) {
+    // 5b8ce0380733944738e57564
+    return this.company = this.getURLParameter('company');
 }
 
 AditCallTrkSwap.changeNumberOnDom = function(replaceNumberArr){
@@ -78,7 +83,6 @@ AditCallTrkSwap.prototype.run = function() {
     this.referrer = this.getReferrer(),
     this.landing = this.getLanding(),
     this.referrer_key = AditCallTrkSwap.getReferrerKey(this.referrer, this.landing);
-    console.log(this.referrer_key);
     return this.referrer_key;
 };
 
@@ -148,8 +152,9 @@ AditCallTrkSwap.prototype.getURLParameter = function(e) {
 }
 
 AditCallTrkSwap.documentReferrer = function() {
-    return "www.facebook.com";
-    // return document.referrer
+    // return "www.facebook.com";
+    console.log(document.referrer);
+    return document.referrer
 }
 
 AditCallTrkSwap.documentURL = function() {
