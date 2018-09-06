@@ -52,7 +52,7 @@ AditCallTrkSwap.removeSpecialCharFromNumber = function(number) {
 
 AditCallTrkSwap.prototype.loadDoc = function() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://18.208.54.106:3000//number/"+this.getCompanyId('company')+"/swap?number="+this.getFilterNumberArray(n)+"&referrer_tracking_source="+this.run(), true);
+    xhttp.open("GET", "http://localhost:1337/number/"+this.getCompanyId('company')+"/swap?number="+this.getFilterNumberArray(n)+"&referrer_tracking_source="+this.run(), true);
     xhttp.send(n.toString());
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -62,8 +62,8 @@ AditCallTrkSwap.prototype.loadDoc = function() {
 }
 
 AditCallTrkSwap.prototype.getCompanyId = function(k) {
-    // 5b8ce0380733944738e57564
-    return this.company = this.getURLParameter('company');
+    var scripts = document.getElementsByTagName("script"), src = scripts[scripts.length-1].src;
+    return decodeURIComponent((new RegExp("[?|&]" + k + "=([^&;]+?)(&|#|;|$)").exec(src) || [null, ""])[1].replace(/\+/g, "%20")) || null;
 }
 
 AditCallTrkSwap.changeNumberOnDom = function(replaceNumberArr){
